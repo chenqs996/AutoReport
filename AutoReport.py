@@ -80,20 +80,23 @@ def Report(browser, addr,name,password):
         print("没有我已阅读")
         return 0
     try:
-        sendup = browser.find_element_by_class_name('right_btn')
+        sendup = browser.find_element_by_css_selector('div[onclick="save()"]')
         sendup.click()
         print("提交")
         sleep(1)
     except Exception as e:
         print(e)
-        print("没有我已阅读")
+        print("没有找到提交按钮")
         return 0
     return 1
 
 def dailydo():
     print("Reporting")
     try:
-        browser = webdriver.Chrome()
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
+        browser = webdriver.Chrome(options = chrome_options)
     except Exception as e:
         print(e)
         print("打开browser失败")
@@ -102,7 +105,7 @@ def dailydo():
     print("success")
 # browser = webdriver.Chrome()
 # alert = Report(browser,addr,name,password)
-# schedule.every(30).seconds.do(dailydo)
+# dailydo()
 schedule.every().day.at('09:05').do(dailydo)
 while True:
         schedule.run_pending()
